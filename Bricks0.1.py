@@ -13,7 +13,7 @@ img_hard_brick= 'hard_brick.png'
 SIZE_X=760 #max size 760x480
 SIZE_Y=480
 
-HANDL_POS = 0.85 * SIZE_Y
+HANDL_POS = 0.8 * SIZE_Y
 
 
 pygame.init()
@@ -45,7 +45,6 @@ class hard_brick(brick):
         brick.__init__(self,crush,line,column,x_brick,y_brick)
         self.points=points
         self.color=color
-        #self.color=pygame.transform.scale(color,(int(SIZE_X*0.07),int(SIZE_Y*0.04)))
         self.fragile=fragile
 
 
@@ -65,6 +64,8 @@ class player:
 
 current_player=player()
 
+#current_player.name=input('enter player name:\n')
+
 
 def GUI():
     
@@ -74,7 +75,7 @@ def GUI():
         app.destroy()
 
     app=Tk()                    #window
-    app.title("Bricks0.8")
+    app.title("Bricks0.6")
     app.geometry('350x200')
 
     labelText=StringVar()       #Label
@@ -93,7 +94,11 @@ def GUI():
     app.mainloop()
 
 
-#some pygame objects
+
+#start_game=False
+
+
+
 background=pygame.image.load(img_back).convert()
 mouse_c=pygame.image.load(img_pointer).convert()
 ball = pygame.image.load(img_ball).convert()
@@ -101,10 +106,10 @@ ball = pygame.image.load(img_ball).convert()
 
 def load_brick():   #setting the bricks
     Array_of_bricks=[]
-    f=open('2_level.txt','r')
+    f=open('1_level.txt','r')
     line =0
     for coords in f.readlines():
-        list_coords= re.findall(r'\d+',coords) 
+        list_coords= re.findall(r'\d+',coords)
         column=0
         for coord in list_coords:
             if int(coord) is 1:
@@ -115,7 +120,7 @@ def load_brick():   #setting the bricks
                 brick1.x_brick=int(0.065*SIZE_X)+brick1.column*brick1.color.get_width()
                 brick1.y_brick=int(0.1*SIZE_Y)+brick1.line*brick1.color.get_height()
                 Array_of_bricks.append(brick1)
-                           
+                #screen.blit(brick1.color,(50+column*brick1.color.get_width(),50+line*brick1.color.get_height()))           
             if int(coord) is 0:
                 brick1=brick()
                 brick1.crush=True
@@ -136,7 +141,6 @@ def load_brick():   #setting the bricks
                 
             column=column+1
         line=line+1
-        
     return Array_of_bricks
 
 bricks=load_brick()
@@ -145,7 +149,7 @@ GUI()
 database = shelve.open('player')
     
 if current_player.name in [player_name_encoded.decode() for player_name_encoded in database.dict.keys()]:
-    print(current_player.name,'started the game')   #if the current player exist in database
+    print(current_player.name,'started the game')
     current_player.list_of_scores = database[current_player.name]
 else:
     print(current_player.name,'started the game')
@@ -156,6 +160,8 @@ def move_handler(): #moving the handler
         screen.blit(mouse_c,(x,HANDL_POS))
         return x
 
+
+#movex, movey = 0,0
 
 def draw_bricks():              #drawing bricks
     for elem in bricks:
@@ -187,7 +193,7 @@ def display(movex,movey):
 
     while True:
         for event in pygame.event.get(): 
-            if event.type == QUIT:
+            if event.type == pygame.QUIT:
                 endgame()
             
             
@@ -202,7 +208,7 @@ def display(movex,movey):
         draw_bricks()
                 
         pygame.display.update()
-        #collisions
+        
         if y_ball+ball.get_height()/2 >= HANDL_POS - mouse_c.get_height()/2 \
            and y_ball+ball.get_height()/2 < HANDL_POS - mouse_c.get_height()/2+1.5 \
            and x_ball + ball.get_width() > x_handler \
@@ -228,14 +234,18 @@ def display(movex,movey):
             print('u lost 1 live ',current_player.lives,'remains')
             break
 
-        current_bricks=[]        
+        current_bricks=[]
+        
         for brick in bricks:
             if not brick.crush:       #condition of collision
                 if y_ball < brick.y_brick + brick.color.get_height() and \
                    x_ball + ball.get_width() > brick.x_brick and \
                    x_ball < brick.x_brick + brick.color.get_width() and\
                    y_ball + ball.get_height() > brick.y_brick:
-                    #print('crushes brick')
+                    #print('4upq tuhla')
+                    #brick.crush=True  #tuk popadnah na seriozna pre4ka
+                    #to 4upi 2 tuhli i pravi movey=-movey=--movey=movey i zatova prodyljava
+                    #kak da go opravq?
 
                     if (y_ball + ball.get_height()/2 < brick.y_brick or \
                        y_ball + ball.get_height()/2 > brick.y_brick + brick.color.get_height()) \
@@ -261,14 +271,14 @@ def display(movex,movey):
                     
             else:
                 current_bricks.append(brick)
-                if len(current_bricks)==len(bricks):    #winning the game
+                if len(current_bricks)==len(bricks):
                     print('CONGRATULATION U WIN!!')
                     print('your score is ',current_player.score)
                     current_player.list_of_scores.append((current_player.score,str(datetime.now())))
                     database[current_player.name]=current_player.list_of_scores
                     print_highscore()
                     endgame()
-
+                    
 
                     
     
@@ -279,8 +289,8 @@ while True:
         if event.type == QUIT:
             endgame()
         if event.type == MOUSEBUTTONDOWN:
-            display(2.0,-2.0) #max 5
-            #display(0.01*random.randint(-150,150),0.01*random.randint(-150,150))
+            #display(0.6,0.6) #max 5
+            display(0.01*random.randint(-150,150),0.01*random.randint(-150,150))
         pygame.draw.line(background,(0,0,0),(0,0),(SIZE_X,0),5)
         pygame.draw.line(background,(0,0,0),(SIZE_X,0),(SIZE_X,SIZE_Y),5)
         pygame.draw.line(background,(0,0,0),(0,SIZE_Y),(0,0),5)
