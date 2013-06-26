@@ -49,8 +49,8 @@ class hard_brick(brick):
 
 
 class player:
-    def __init__(self,lives=3,score=0,list_of_scores=[],name='UNNAMED_NEWBIE'):
-        self.lives=lives
+    def __init__(self,lifes=3,score=0,list_of_scores=[],name='UNNAMED_NEWBIE'):
+        self.lifes=lifes
         self.score=score
         self.list_of_scores=list_of_scores
         self.name=name
@@ -75,7 +75,7 @@ def GUI():
         app.destroy()
 
     app=Tk()                    #window
-    app.title("Bricks0.6")
+    app.title("Bricks")
     app.geometry('350x200')
 
     labelText=StringVar()       #Label
@@ -230,8 +230,8 @@ def display(movex,movey):
 
         if y_ball+ball.get_height()/2 > SIZE_Y:
             
-            current_player.lives = current_player.lives - 1
-            print('You lost 1 life',current_player.lives,'remain(s)')
+            current_player.lifes = current_player.lifes - 1
+            print('You lost 1 life',current_player.lifes,'remain(s)')
             break
 
         current_bricks=[]
@@ -282,7 +282,6 @@ def display(movex,movey):
 
                     
     
-
 while True:
     
     try:
@@ -300,7 +299,7 @@ while True:
             pygame.draw.line(background,(0,0,0),(SIZE_X,0),(SIZE_X,SIZE_Y),5)
             pygame.draw.line(background,(0,0,0),(0,SIZE_Y),(0,0),5)
 
-        if current_player.lives==0:
+        if current_player.lifes==0:
             print('GAME OVER')
             print('your score is',current_player.score)
             current_player.list_of_scores.append((current_player.score,str(datetime.now())))
@@ -331,7 +330,9 @@ while True:
         pygame.display.update() #updating the screen
     except:
         pygame.quit()
-        sys.exit()
+        sys.exit
+        break
+        
     
     
 
