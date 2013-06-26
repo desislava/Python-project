@@ -184,7 +184,7 @@ def print_highscore():
     for score in database[current_player.name]:
         scores.append(score)
     scores.sort(reverse=True)
-    print(current_player.name,' high score is ',scores[0][0],\
+    print(current_player.name,'high score is',scores[0][0],\
           'achieved at', scores[0][1])
         
 
@@ -231,7 +231,7 @@ def display(movex,movey):
         if y_ball+ball.get_height()/2 > SIZE_Y:
             
             current_player.lives = current_player.lives - 1
-            print('u lost 1 live ',current_player.lives,'remains')
+            print('You lost 1 life',current_player.lives,'remain(s)')
             break
 
         current_bricks=[]
@@ -273,7 +273,7 @@ def display(movex,movey):
                 current_bricks.append(brick)
                 if len(current_bricks)==len(bricks):
                     print('CONGRATULATION U WIN!!')
-                    print('your score is ',current_player.score)
+                    print('your score is',current_player.score)
                     current_player.list_of_scores.append((current_player.score,str(datetime.now())))
                     database[current_player.name]=current_player.list_of_scores
                     print_highscore()
@@ -284,44 +284,57 @@ def display(movex,movey):
     
 
 while True:
+    
+    try:
+        for event in pygame.event.get():  #quiting the game
+            if event.type == QUIT:
+                endgame()
+            if event.type == MOUSEBUTTONDOWN:
+                #display(0.6,0.6) #max 5
+                try:
+                    display(0.01*random.randint(-150,150),0.01*random.randint(-150,150))
+                except:
+                    pass
+                
+            pygame.draw.line(background,(0,0,0),(0,0),(SIZE_X,0),5)
+            pygame.draw.line(background,(0,0,0),(SIZE_X,0),(SIZE_X,SIZE_Y),5)
+            pygame.draw.line(background,(0,0,0),(0,SIZE_Y),(0,0),5)
 
-    for event in pygame.event.get():  #quiting the game
-        if event.type == QUIT:
+        if current_player.lives==0:
+            print('GAME OVER')
+            print('your score is',current_player.score)
+            current_player.list_of_scores.append((current_player.score,str(datetime.now())))
+            database[current_player.name]=current_player.list_of_scores
+            print_highscore()
             endgame()
-        if event.type == MOUSEBUTTONDOWN:
-            #display(0.6,0.6) #max 5
-            display(0.01*random.randint(-150,150),0.01*random.randint(-150,150))
-        pygame.draw.line(background,(0,0,0),(0,0),(SIZE_X,0),5)
-        pygame.draw.line(background,(0,0,0),(SIZE_X,0),(SIZE_X,SIZE_Y),5)
-        pygame.draw.line(background,(0,0,0),(0,SIZE_Y),(0,0),5)
-
-    if current_player.lives==0:
-        print('GAME OVER')
-        print('your score is ',current_player.score)
-        current_player.list_of_scores.append((current_player.score,str(datetime.now())))
-        database[current_player.name]=current_player.list_of_scores
-        print_highscore()
-        endgame()
                 
         
                            
-#setting the background
-    screen.blit(background, (0,0)) 
+        #setting the background
+        screen.blit(background, (0,0))
 
-#setting the mouse
-    x,y= pygame.mouse.get_pos()
-    x = x - mouse_c.get_width()/2
-    y = y - mouse_c.get_height()/2
     
-    screen.blit(mouse_c,(x,HANDL_POS))
 
-#setting the ball
-    screen.blit(ball,(SIZE_X/2,SIZE_Y/2))
+        #setting the mouse
+   
+        x,y= pygame.mouse.get_pos()
+        x = x - mouse_c.get_width()/2
+        y = y - mouse_c.get_height()/2
+        
+        screen.blit(mouse_c,(x,HANDL_POS))
+        
+        #setting the ball
+        screen.blit(ball,(SIZE_X/2,SIZE_Y/2))
  
-    draw_bricks()
+        draw_bricks()
        
- 
+        pygame.display.update() #updating the screen
+    except:
+        pygame.quit()
+        sys.exit()
+    
+    
 
-    pygame.display.update() #updating the screen
+
 
 
