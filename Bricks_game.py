@@ -30,7 +30,6 @@ class brick:
         self.column=column
         self.x_brick=x_brick
         self.y_brick=y_brick
-        #self.color=pygame.transform.scale(color,(int(SIZE_X*0.07),int(SIZE_Y*0.04)))
         self.color=color
         self.fragile=fragile
 
@@ -64,14 +63,11 @@ class player:
 
 current_player=player()
 
-#current_player.name=input('enter player name:\n')
-
 
 def GUI():
     
     def update_Database():
         current_player.name=yourName.get()
-        #print(yourName.get())
         app.destroy()
 
     app=Tk()                    #window
@@ -95,9 +91,6 @@ def GUI():
 
 
 
-#start_game=False
-
-
 
 background=pygame.image.load(img_back).convert()
 mouse_c=pygame.image.load(img_pointer).convert()
@@ -118,16 +111,17 @@ def load_brick():   #setting the bricks
                 brick1.line=line
                 brick1.column=column
                 brick1.x_brick=int(0.065*SIZE_X)+brick1.column*brick1.color.get_width()
-                brick1.y_brick=int(0.1*SIZE_Y)+brick1.line*brick1.color.get_height()
+                brick1.y_brick=int(0.07*SIZE_Y)+brick1.line*brick1.color.get_height()
                 Array_of_bricks.append(brick1)
-                #screen.blit(brick1.color,(50+column*brick1.color.get_width(),50+line*brick1.color.get_height()))           
+        
             if int(coord) is 0:
                 brick1=brick()
+                brick1.fragile=0
                 brick1.crush=True
                 brick1.line=line
                 brick1.column=column
                 brick1.x_brick=int(0.065*SIZE_X)+brick1.column*brick1.color.get_width()
-                brick1.y_brick=int(0.1*SIZE_Y)+brick1.line*brick1.color.get_height()
+                brick1.y_brick=int(0.07*SIZE_Y)+brick1.line*brick1.color.get_height()
                 Array_of_bricks.append(brick1)
 
             if int(coord) is 2:
@@ -136,7 +130,7 @@ def load_brick():   #setting the bricks
                 brick1.line=line
                 brick1.column=column
                 brick1.x_brick=int(0.065*SIZE_X)+brick1.column*brick1.color.get_width()
-                brick1.y_brick=int(0.1*SIZE_Y)+brick1.line*brick1.color.get_height()
+                brick1.y_brick=int(0.07*SIZE_Y)+brick1.line*brick1.color.get_height()
                 Array_of_bricks.append(brick1)
                 
             column=column+1
@@ -160,8 +154,6 @@ def move_handler(): #moving the handler
         screen.blit(mouse_c,(x,HANDL_POS))
         return x
 
-
-#movex, movey = 0,0
 
 def draw_bricks():              #drawing bricks
     for elem in bricks:
@@ -213,19 +205,19 @@ def display(movex,movey):
            and y_ball+ball.get_height()/2 < HANDL_POS - mouse_c.get_height()/2+1.5 \
            and x_ball + ball.get_width() > x_handler \
            and x_ball < x_handler + mouse_c.get_width(): #the condition of bouncing
-            #print('The ball hits the handler')
+            #ball hits the handler
             movey=-movey
 
         if y_ball < 0:
-            #print('The ball hits the top')
+            #ball hits the top
             movey=-movey
 
         if x_ball < 0:
-            #print('The ball hits the left wall')
+            #ball hits the left wall
             movex=-movex
 
         if x_ball+ball.get_width() > SIZE_X:
-            #print('The ball hits the right wall')
+            #ball hits the right wall
             movex=-movex                
 
         if y_ball+ball.get_height()/2 > SIZE_Y:
@@ -242,17 +234,13 @@ def display(movex,movey):
                    x_ball + ball.get_width() > brick.x_brick and \
                    x_ball < brick.x_brick + brick.color.get_width() and\
                    y_ball + ball.get_height() > brick.y_brick:
-                    #print('4upq tuhla')
-                    #brick.crush=True  #tuk popadnah na seriozna pre4ka
-                    #to 4upi 2 tuhli i pravi movey=-movey=--movey=movey i zatova prodyljava
-                    #kak da go opravq?
 
                     if (y_ball + ball.get_height()/2 < brick.y_brick or \
                        y_ball + ball.get_height()/2 > brick.y_brick + brick.color.get_height()) \
                        and not (x_ball + ball.get_width()/2 < brick.x_brick or \
                        x_ball + ball.get_width()/2 > brick.x_brick + brick.color.get_width()) :
                         movey=-movey
-                        #print('crushes by y')
+                        #crushes by y
                         brick.fragile = brick.fragile - 1
                         brick.crushed()
                         current_player.score = current_player.score + brick.points
@@ -263,13 +251,12 @@ def display(movex,movey):
                        and not(y_ball + ball.get_height()/2 < brick.y_brick or \
                        y_ball + ball.get_height()/2 > brick.y_brick + brick.color.get_height()):
                         movex=-movex
-                        #print('crushes by x')
+                        #crushes by x
                         brick.fragile = brick.fragile - 1
                         brick.crushed()
                         current_player.score = current_player.score + brick.points
                         break
                     
-            else:
                 current_bricks.append(brick)
                 if len(current_bricks)==len(bricks):
                     print('CONGRATULATION U WIN!!')
@@ -289,7 +276,6 @@ while True:
             if event.type == QUIT:
                 endgame()
             if event.type == MOUSEBUTTONDOWN:
-                #display(0.6,0.6) #max 5
                 try:
                     display(0.01*random.randint(-150,150),0.01*random.randint(-150,150))
                 except:
@@ -335,7 +321,6 @@ while True:
         
     
     
-
 
 
 

@@ -1,5 +1,5 @@
 import unittest
-#from Bricks_game import *
+from Bricks_game import *
 
 class BricksTest(unittest.TestCase):
    
@@ -23,16 +23,22 @@ class BricksTest(unittest.TestCase):
         self.assertEqual(player2.lifes,3)
 
 
-    def test_draw_bricks(self):
-        #risuvam nqkakvi neshta
-        print("draw")
-
     def test_load_brick(self):
-        print("load")
-                            #zarejdam si tuhlichki
+        bricks = load_brick()
+        #print(bricks[29].fragile)
+        f=open('1_level.txt','r+').read()
+        file=[]
+        bricks1=[]
+        for char in range(0,len(f)):
+            if not f[char] == ',' and not f[char] == '\n':
+                file.append(int(f[char]))
+        for brick in bricks:
+            bricks1.append(brick.fragile)
+        self.assertEqual(bricks1, file, "Nooooo")
+                
+        
+
 
 if __name__ == '__main__':
-    from Bricks_game import *
     unittest.main()
-else:
-    from Bricks_game import *
+
